@@ -15,6 +15,11 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverPanel;
     public GameObject victoryPanel;
 
+    [Header("UI - Score Final nos Painéis")]
+    public TextMeshProUGUI gameOverScoreText;
+    public TextMeshProUGUI victoryScoreText;
+    public TextMeshProUGUI newRecordText;       // Texto "NOVO RECORDE!" (opcional)
+
     [Header("Jogo")]
     public int lives = 3;
     public int score = 0;
@@ -111,22 +116,35 @@ public class GameManager : MonoBehaviour
 
     IEnumerator MostrarPainel(GameObject painel)
     {
-        // Salva High Score antes de exibir o painel
-        SalvarHighScore();
+        bool novoRecorde = SalvarHighScore();
 
         yield return new WaitForSecondsRealtime(0.5f);
         Time.timeScale = 0f;
+
         if (painel) painel.SetActive(true);
+
+        // Preenche score final no painel correto
+        string scoreStr = "SCORE: " + score.ToString("D6");
+        if (painel == gameOverPanel && gameOverScoreText)
+            gameOverScoreText.text = scoreStr;
+        if (painel == victoryPanel && victoryScoreText)
+            victoryScoreText.text = scoreStr;
+
+        // Exibe "NOVO RECORDE!" se aplicável
+        if (newRecordText)
+            newRecordText.gameObject.SetActive(novoRecorde);
     }
 
-    void SalvarHighScore()
+    bool SalvarHighScore()
     {
         int hi = PlayerPrefs.GetInt("HighScore", 0);
         if (score > hi)
         {
             PlayerPrefs.SetInt("HighScore", score);
             PlayerPrefs.Save();
+            return true;
         }
+        return false;
     }
 
     // ─── Boss ────────────────────────────────────────────────────

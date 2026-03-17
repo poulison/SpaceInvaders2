@@ -256,8 +256,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -145, y: -29}
-  m_SizeDelta: {x: 264.7407, y: 38.575104}
+  m_AnchoredPosition: {x: -194.13019, y: -29}
+  m_SizeDelta: {x: 363.0011, y: 38.5751}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &417068204
 MonoBehaviour:
@@ -279,7 +279,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Vidas: 3'
+  m_text: 'Vidas: '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c2fd433dc2f7f1f42beb763771205e3f, type: 2}
   m_sharedMaterial: {fileID: 9021905545251838066, guid: c2fd433dc2f7f1f42beb763771205e3f, type: 2}
@@ -672,11 +672,14 @@ MonoBehaviour:
   livesText: {fileID: 417068204}
   gameOverPanel: {fileID: 0}
   victoryPanel: {fileID: 0}
+  gameOverScoreText: {fileID: 0}
+  victoryScoreText: {fileID: 0}
+  newRecordText: {fileID: 0}
   lives: 3
   score: 0
-  bossPrefab: {fileID: 0}
-  minBossDelay: 30
-  maxBossDelay: 50
+  bossPrefab: {fileID: 1299780027126539085, guid: 9c07ce2e07d53734c92d7c684f1ea8f2, type: 3}
+  minBossDelay: 3
+  maxBossDelay: 5
 --- !u!4 &1265193297
 Transform:
   m_ObjectHideFlags: 0
@@ -687,37 +690,6 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.35183, y: -0.96229, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1521620539
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1521620540}
-  m_Layer: 0
-  m_Name: Boss
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1521620540
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1521620539}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 256.89243, y: 174.24251, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1128,7 +1100,6 @@ SceneRoots:
   - {fileID: 966601154}
   - {fileID: 1265193297}
   - {fileID: 2169955917397680995}
-  - {fileID: 1521620540}
   - {fileID: 401094217}
   - {fileID: 1762047476}
   - {fileID: 853569229}

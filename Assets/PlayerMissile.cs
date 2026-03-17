@@ -14,9 +14,14 @@ public class PlayerMissile : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Alien") || col.CompareTag("Boss"))
+        if (col.CompareTag("Alien"))
         {
             col.GetComponent<AlienController>()?.TakeHit();
+            Destroy(gameObject);
+        }
+        else if (col.CompareTag("Boss"))
+        {
+            col.GetComponent<BossController>()?.TakeHit();
             Destroy(gameObject);
         }
     }
