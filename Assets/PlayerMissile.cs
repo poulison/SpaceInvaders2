@@ -7,7 +7,6 @@ public class PlayerMissile : MonoBehaviour
     void Update()
     {
         transform.Translate(Vector2.up * speed * Time.deltaTime);
-        // Remove se sair da tela
         if (transform.position.y > 7f)
             Destroy(gameObject);
     }
@@ -24,5 +23,6 @@ public class PlayerMissile : MonoBehaviour
             col.GetComponent<BossController>()?.TakeHit();
             Destroy(gameObject);
         }
+
     }
 }
