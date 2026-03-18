@@ -175,6 +175,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AlienController
   alienMissilePrefab: {fileID: 1998019976823120956, guid: efb034ec3ad349f43acc43dc8a1c836e, type: 3}
-  minFireDelay: 30
-  maxFireDelay: 40
+  minFireDelay: 20
+  maxFireDelay: 25
   points: 10

@@ -7,10 +7,12 @@ public class PlayerController : MonoBehaviour
 
     [Header("Míssil")]
     public GameObject missilePrefab;
+    public float fireCooldown = 0.5f;   // segundos entre cada tiro
 
     private Rigidbody2D rb2d;
     private float limiteEsquerda;
     private float limiteDireita;
+    private float fireTimer = 0f;
 
     void Start()
     {
@@ -26,8 +28,13 @@ public class PlayerController : MonoBehaviour
     {
         MoverPlayer();
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        fireTimer += Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.Space) && fireTimer >= fireCooldown)
+        {
             Atirar();
+            fireTimer = 0f;
+        }
     }
 
     void MoverPlayer()

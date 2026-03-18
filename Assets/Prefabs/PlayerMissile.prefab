@@ -179,4 +179,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 450ecddbbb525494dbf7953b41144263, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMissile
-  speed: 10
+  speed: 7

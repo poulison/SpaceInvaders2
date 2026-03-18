@@ -16,19 +16,26 @@ public class AlienSpawner : MonoBehaviour
     public float speed = 2f;
     public float stepDown = 0.4f;
 
+    [Header("Aceleração")]
+    public float speedIncreasePerKill = 0.08f;  // quanto acelera por alien morto
+    public float maxSpeed = 10f;                 // limite para não ficar impossível
+
     private float direction = 1f;
     private float limiteEsquerda;
     private float limiteDireita;
+    private int totalAliens;
+    private float currentSpeed;
 
     void Start()
     {
         Camera cam = Camera.main;
-
-        // ✅ Limites da tela
         limiteEsquerda = cam.ViewportToWorldPoint(new Vector3(0, 0, 0)).x + 0.5f;
         limiteDireita  = cam.ViewportToWorldPoint(new Vector3(1, 0, 0)).x - 0.5f;
 
         SpawnFormation();
+
+        totalAliens  = transform.childCount;
+        currentSpeed = speed;
     }
 
     void SpawnFormation()
@@ -38,11 +45,11 @@ public class AlienSpawner : MonoBehaviour
         float startY = topoTela - 1.5f;
 
         GameObject[] prefabPorFileira = {
-            alienTipo1Prefab, // fileira 0 - topo   (30 pts)
-            alienTipo2Prefab, // fileira 1           (20 pts)
-            alienTipo2Prefab, // fileira 2           (20 pts)
-            alienTipo3Prefab, // fileira 3           (10 pts)
-            alienTipo3Prefab  // fileira 4 - baixo   (10 pts)
+            alienTipo1Prefab,
+            alienTipo2Prefab,
+            alienTipo2Prefab,
+            alienTipo3Prefab,
+            alienTipo3Prefab
         };
 
         for (int row = 0; row < 5; row++)
@@ -61,14 +68,21 @@ public class AlienSpawner : MonoBehaviour
 
     void Update()
     {
-        transform.position += Vector3.right * direction * speed * Time.deltaTime;
+        // Recalcula velocidade com base nos aliens vivos
+        int aliensVivos = transform.childCount;
+        int mortos = totalAliens - aliensVivos;
+        currentSpeed = Mathf.Min(speed + mortos * speedIncreasePerKill, maxSpeed);
+
+        transform.position += Vector3.right * direction * currentSpeed * Time.deltaTime;
 
         float maxX = GetMaxX();
         float minX = GetMinX();
 
+        // Sem filhos — nada a fazer
+        if (maxX == float.MinValue || minX == float.MaxValue) return;
+
         if (direction == 1f && maxX >= limiteDireita)
         {
-            // ✅ Corrige o excesso e inverte
             float overflow = maxX - limiteDireita;
             transform.position -= new Vector3(overflow, 0, 0);
             direction = -1f;
@@ -76,7 +90,6 @@ public class AlienSpawner : MonoBehaviour
         }
         else if (direction == -1f && minX <= limiteEsquerda)
         {
-            // ✅ Corrige o excesso e inverte
             float overflow = limiteEsquerda - minX;
             transform.position += new Vector3(overflow, 0, 0);
             direction = 1f;

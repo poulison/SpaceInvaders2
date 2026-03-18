@@ -7,18 +7,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    [Header("UI - Textos")]
+    [Header("UI - HUD")]
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI livesText;
-
-    [Header("UI - Painéis")]
-    public GameObject gameOverPanel;
-    public GameObject victoryPanel;
-
-    [Header("UI - Score Final nos Painéis")]
-    public TextMeshProUGUI gameOverScoreText;
-    public TextMeshProUGUI victoryScoreText;
-    public TextMeshProUGUI newRecordText;       // Texto "NOVO RECORDE!" (opcional)
 
     [Header("Jogo")]
     public int lives = 3;
@@ -43,14 +34,8 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
 
-        // Conta apenas aliens normais (não o boss)
         aliensAlive = FindObjectsByType<AlienController>(FindObjectsSortMode.None).Length;
-
-        nextBoss = Random.Range(minBossDelay, maxBossDelay);
-
-        // Garante que os painéis começam escondidos
-        if (gameOverPanel)  gameOverPanel.SetActive(false);
-        if (victoryPanel)   victoryPanel.SetActive(false);
+        nextBoss    = Random.Range(minBossDelay, maxBossDelay);
 
         UpdateUI();
     }
@@ -59,7 +44,6 @@ public class GameManager : MonoBehaviour
     {
         if (gameEnded) return;
 
-        // Spawn do Boss
         bossTimer += Time.deltaTime;
         if (bossTimer >= nextBoss)
         {
@@ -69,9 +53,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // ─── Pontuação ──────────────────────────────────────────────
+    // ─── Pontuação ───────────────────────────────────────────────
 
-    /// <param name="isAlien">false para o Boss (não conta na vitória)</param>
     public void AddScore(int pts, bool isAlien = true)
     {
         score += pts;
@@ -104,47 +87,36 @@ public class GameManager : MonoBehaviour
     {
         if (gameEnded) return;
         gameEnded = true;
-        StartCoroutine(MostrarPainel(gameOverPanel));
+        StartCoroutine(IrParaCena("GameOverScene"));
     }
 
     void Victory()
     {
         if (gameEnded) return;
         gameEnded = true;
-        StartCoroutine(MostrarPainel(victoryPanel));
+        StartCoroutine(IrParaCena("WinScene"));
     }
 
-    IEnumerator MostrarPainel(GameObject painel)
+    IEnumerator IrParaCena(string nomeCena)
     {
-        bool novoRecorde = SalvarHighScore();
-
-        yield return new WaitForSecondsRealtime(0.5f);
-        Time.timeScale = 0f;
-
-        if (painel) painel.SetActive(true);
-
-        // Preenche score final no painel correto
-        string scoreStr = "SCORE: " + score.ToString("D6");
-        if (painel == gameOverPanel && gameOverScoreText)
-            gameOverScoreText.text = scoreStr;
-        if (painel == victoryPanel && victoryScoreText)
-            victoryScoreText.text = scoreStr;
-
-        // Exibe "NOVO RECORDE!" se aplicável
-        if (newRecordText)
-            newRecordText.gameObject.SetActive(novoRecorde);
+        SalvarDados();
+        yield return new WaitForSecondsRealtime(0.8f);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(nomeCena);
     }
 
-    bool SalvarHighScore()
+    void SalvarDados()
     {
+        // Salva o score da partida para exibir na cena de resultado
+        PlayerPrefs.SetInt("LastScore", score);
+
+        // Atualiza o High Score se necessário
         int hi = PlayerPrefs.GetInt("HighScore", 0);
         if (score > hi)
         {
             PlayerPrefs.SetInt("HighScore", score);
-            PlayerPrefs.Save();
-            return true;
         }
-        return false;
+        PlayerPrefs.Save();
     }
 
     // ─── Boss ────────────────────────────────────────────────────
@@ -153,22 +125,6 @@ public class GameManager : MonoBehaviour
     {
         if (bossPrefab != null)
             Instantiate(bossPrefab);
-    }
-
-    // ─── Botões de UI ────────────────────────────────────────────
-
-    /// <summary>Conecte ao botão "Reiniciar" no painel de Game Over / Vitória.</summary>
-    public void Reiniciar()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    /// <summary>Conecte ao botão "Menu Principal".</summary>
-    public void IrParaMenu()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("MenuScene");
     }
 
     // ─── UI ──────────────────────────────────────────────────────
